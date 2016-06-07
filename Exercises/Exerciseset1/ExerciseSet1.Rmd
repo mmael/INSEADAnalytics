@@ -1,9 +1,10 @@
 
 ---
 title: "Exercise Set 1"
-author: "T. Evgeniou"
+author: "M. Mertad"
 output: html_document
 ---
+
 
 
 <br>
@@ -254,13 +255,16 @@ Try it!
 2. *(Extra exercise)* What do you think will happen if you now run this command, and why:  
 
 ```{r eval = FALSE, echo=TRUE}
-myData + StockReturns[1:40,])
+myData + StockReturns[1:40,]
 ```
 
 **Your Answers here:**  
 1.  
+```{r eval = TRUE, echo=TRUE}
+sum(myData != StockReturns[1:20,])
+```
 
-col.names is ignored in the write.csv function, which prevents me for completing the exercise. 
+N.B. col.names is ignored in the write.csv function.
 
 <br>
 <br>
