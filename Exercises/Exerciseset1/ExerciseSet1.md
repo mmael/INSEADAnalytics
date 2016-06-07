@@ -2,7 +2,7 @@
 ---
 title: "Exercise Set 1"
 author: "M. Mertad"
-output: html_document
+output: pdf_document
 ---
 
 
@@ -16,11 +16,12 @@ The purpose of this exercise is to become familiar with:
 3. Simple data manipulations; 
 4. The idea of functions as well as some useful customized functions provided. 
 
-While doing this exercise we will also see how to generate replicable and customizable reports. For this purpose the exercise uses the R Markdown capabilities (see [Markdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) or a [basic introduction to R Markdown](http://rmarkdown.rstudio.com/authoring_basics.html)).  These capabilities allow us to create dynamic reports. For example today's date is `r Sys.Date()` (you need to see the .Rmd to understand that this is *not* a static typed-in date but it changes every time you compile the .Rmd - if the date changed of course).
+While doing this exercise we will also see how to generate replicable and customizable reports. For this purpose the exercise uses the R Markdown capabilities (see [Markdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) or a [basic introduction to R Markdown](http://rmarkdown.rstudio.com/authoring_basics.html)).  These capabilities allow us to create dynamic reports. For example today's date is 2016-06-07 (you need to see the .Rmd to understand that this is *not* a static typed-in date but it changes every time you compile the .Rmd - if the date changed of course).
 
 Before starting, make sure you have pulled the [exercise files](https://github.com/InseadDataAnalytics/INSEADAnalytics/tree/master/Exercises/Exerciseset1)  on your github repository (if you pull the course github repository you also get the exercise set files automatically). Moreover, make sure you are in the directory of this exercise. Directory paths may be complicated, and sometimes a frustrating source of problems, so it is recommended that you use these R commands to find out your current working directory and, if needed, set it where you have the main files for the specific exercise/project (there are other ways, but for now just be aware of this path issue). For example, assuming we are now in the "MYDIRECTORY/INSEADAnalytics" directory, we can do these: 
 
-```{r echo=TRUE, eval=FALSE, tidy=TRUE}
+
+```r
 getwd()
 setwd("Exercises/Exerciseset1/")
 list.files()
@@ -39,10 +40,15 @@ Let's now see the exercise.
 
 We download daily prices (open, high, low, close, and adjusted close) and volume data of publicly traded companies and markets from the web (e.g. Yahoo! or Google, etc). This is done by sourcing the file data.R as well as some helper functions in herpersSet1.R which also installs a number of R libraries (hence the first time you run this code you will see a lot of red color text indicating the *download* and *installation* process):
 
-```{r eval = TRUE, echo=TRUE, error = FALSE, warning=FALSE,message=FALSE,results='asis'}
+
+```r
 source("helpersSet1.R")
 source("dataSet1.R")
 ```
+
+[1] "\nDownloading ticker  SPY  ..."
+[1] "\nDownloading ticker  AAPL  ..."
+[1] "\nDownloading ticker  YHOO  ..."
 
 For more information on downloading finance data from the internet as well as on finance related R tools see these starting points (there is a lot more of course available):
 
@@ -66,21 +72,18 @@ For more information on downloading finance data from the internet as well as on
 
 ### Part I: Statistics of S&P Daily Returns
 
-We have `r nrow(StockReturns)` days of data, starting from `r rownames(StockReturns)[1]` until `r tail(rownames(StockReturns),1)`.  Here are some basic statistics about the S&P returns:
+We have 3879 days of data, starting from 2001-01-03 until 2016-06-06.  Here are some basic statistics about the S&P returns:
 
-1. The cumulative returns of the S&P index during this period is `r round(100*sum(StockReturns[,1]),1)`%.
+1. The cumulative returns of the S&P index during this period is 108.9%.
 
-2. The average daily returns of the S&P index during this period is `r round(100*mean(StockReturns[,1]),3)`%.
+2. The average daily returns of the S&P index during this period is 0.028%.
 
-3. The standard deviation of the daily returns of the S&P index during this period is `r round(100*sd(StockReturns[,1]),3)`%.
+3. The standard deviation of the daily returns of the S&P index during this period is 1.249%.
 
 
 Here are returns of the S&P in this period (note the use of the helper function pnl_plot - defined in file helpersSet1.R):
 
-```{r echo=FALSE, comment=NA, warning=FALSE, message=FALSE,results='asis',fig.align='center', fig.height=4,fig.width= 6, fig=TRUE}
-SPY = StockReturns[,"SPY"]
-pnl_plot(SPY)
-```
+<img src="figure/unnamed-chunk-3-1.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" style="display: block; margin: auto;" />
 
 #### Questions
 
@@ -91,7 +94,8 @@ pnl_plot(SPY)
 **Your Answers here:**
 
 1. In dataSet1.R file, variable "mytickers" include both "SPY" and "AAPL" stocks. This variable is then used to download both SPY and Apple stock prices, via this loop:  
-```{r eval = FALSE, echo=TRUE, error = FALSE, warning=FALSE,message=FALSE,results='asis'}
+
+```r
   for (ticker_index in 1:length(mytickers)){
   ...
   }
@@ -99,32 +103,26 @@ pnl_plot(SPY)
 
 
 2. 
-The cumulative returns of the APPLE index during this period is `r round(100*sum(StockReturns[,2]),1)`%.  
-The average daily returns of the APPLE index during this period is `r round(100*mean(StockReturns[,2]),3)`%.  
-The standard deviation of the daily returns of the APPLE index during this period is `r round(100*sd(StockReturns[,2]),3)`%.  
+The cumulative returns of the APPLE index during this period is 575.5%.  
+The average daily returns of the APPLE index during this period is 0.148%.  
+The standard deviation of the daily returns of the APPLE index during this period is 2.425%.  
 
-```{r echo=FALSE, comment=NA, warning=FALSE, message=FALSE,results='asis',fig.align='center', fig.height=4,fig.width= 6, fig=TRUE}
-AAPL = StockReturns[,"AAPL"]
-pnl_plot(AAPL)
-```
+<img src="figure/unnamed-chunk-5-1.png" title="plot of chunk unnamed-chunk-5" alt="plot of chunk unnamed-chunk-5" style="display: block; margin: auto;" />
 
   
 3.
 Line 8 of file dataSet1.R modified as:  
-```{r eval = FALSE, echo=TRUE, error = FALSE, warning=FALSE,message=FALSE,results='asis'}
+
+```r
 mytickers = c("SPY", "AAPL", "YHOO")  # Other tickers for example are "GOOG", "GS", "TSLA", "FB", "MSFT", 
-
 ```
 
   
-The cumulative returns of the YAHOO index during this period is `r round(100*sum(StockReturns[,3]),1)`%.  
-The average daily returns of the YAHOO index during this period is `r round(100*mean(StockReturns[,3]),3)`%.  
-The standard deviation of the daily returns of the YAHOO index during this period is `r round(100*sd(StockReturns[,3]),3)`%.    
+The cumulative returns of the YAHOO index during this period is 276.4%.  
+The average daily returns of the YAHOO index during this period is 0.071%.  
+The standard deviation of the daily returns of the YAHOO index during this period is 3.064%.    
   
-```{r echo=FALSE, comment=NA, warning=FALSE, message=FALSE,results='asis',fig.align='center', fig.height=4,fig.width= 6, fig=TRUE}
-YHOO = StockReturns[,"YHOO"]
-pnl_plot(YHOO)
-```
+<img src="figure/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" style="display: block; margin: auto;" />
 
 
 <br>
@@ -137,7 +135,8 @@ pnl_plot(YHOO)
 
 For this part of the exercise we will do some basic manipulations of the data. First note that the data are in a so-called matrix format. If you run these commands in RStudio (use help to find out what they do) you will see how matrices work: 
 
-```{r eval = FALSE, echo=TRUE}
+
+```r
 class(StockReturns)
 dim(StockReturns)
 nrow(StockReturns)
@@ -151,11 +150,14 @@ We will now use an R function for matrices that is extremely useful for analyzin
 
 For example, we can now quickly estimate the average returns of S&P and Apple (of course this can be done manually, too, but what if we had 500 stocks - e.g. a matrix with 500 columns?) and plot the returns of that 50-50 on S&P and Apple portfolio:
 
-```{r echo=TRUE, comment=NA, warning=FALSE, message=FALSE,results='asis',fig.align='center', fig=TRUE}
+
+```r
 portfolio = apply(StockReturns[,c("SPY","AAPL")],1,mean)
 names(portfolio) <- rownames(StockReturns)
 pnl_plot(portfolio)
 ```
+
+<img src="figure/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" style="display: block; margin: auto;" />
 
 
 We can also transpose the matrix of returns to create a new "horizontal" matrix. Let's call this matrix (variable name) transposedData. We can do so using this command:  `transposedData = t(StockReturns)`. 
@@ -167,20 +169,31 @@ We can also transpose the matrix of returns to create a new "horizontal" matrix.
 
 **Your Answers here:**  
 1.  
-```{r eval = TRUE, echo=TRUE, error = FALSE, warning=FALSE,message=FALSE,results='asis'}
+
+```r
 transposedData = t(StockReturns)
 nrow(transposedData)
+```
+
+[1] 3
+
+```r
 ncol(transposedData)
 ```
 
-Number of ROws of transposedData is  `r nrow(transposedData)`.  
-Number of COlomns of transposedData is  `r ncol(transposedData)`.
+[1] 3879
+
+Number of ROws of transposedData is  3.  
+Number of COlomns of transposedData is  3879.
 
 2.  
-```{r echo=TRUE, comment=NA, warning=FALSE, message=FALSE,results='asis',fig.align='center', fig=TRUE}
+
+```r
 portfolio = apply(transposedData,2,mean)
 pnl_plot(portfolio)
 ```
+
+<img src="figure/unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" style="display: block; margin: auto;" />
 
 
 <br>
@@ -204,24 +217,43 @@ This is an important step and will get you to think about the overall process on
 
 1. 
 New file dataSet2.R where mytickers and startDate variables are called outside the file:  
-```{r eval = TRUE, echo=TRUE, error = FALSE, warning=FALSE,message=FALSE,results='asis'}
+
+```r
 mytickers = c("SPY", "AAPL", "YHOO")  # Other tickers for example are "GOOG", "GS", "TSLA", "FB", "MSFT", 
 startDate = "2000-12-29"
 source("dataSet2.R")
-
 ```
 
+[1] "\nDownloading ticker  SPY  ..."
+[1] "\nDownloading ticker  AAPL  ..."
+[1] "\nDownloading ticker  YHOO  ..."
+
 2.  
-```{r echo=TRUE, comment=NA, warning=FALSE, message=FALSE,results='asis',fig.align='center', fig=TRUE}
+
+```r
 rm(list=ls()) # Clean up the memory, if we want to rerun from scratch
 source("helpersSet1.R")
 mytickers = c("SPY", "AAPL", "YHOO", "GOOG", "GS", "TSLA", "FB", "MSFT") 
 startDate = "2001-01-01"
 source("dataSet2.R")
+```
+
+[1] "\nDownloading ticker  SPY  ..."
+[1] "\nDownloading ticker  AAPL  ..."
+[1] "\nDownloading ticker  YHOO  ..."
+[1] "\nDownloading ticker  GOOG  ..."
+[1] "\nDownloading ticker  GS  ..."
+[1] "\nDownloading ticker  TSLA  ..."
+[1] "\nDownloading ticker  FB  ..."
+[1] "\nDownloading ticker  MSFT  ..."
+
+```r
 portfolio2 = apply(StockReturns,1,mean)
 names(portfolio2) <- rownames(StockReturns)
 pnl_plot(portfolio2)
 ```
+
+<img src="figure/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" style="display: block; margin: auto;" />
 
 
 <br>
@@ -237,13 +269,15 @@ pnl_plot(portfolio2)
 
 Finally, one can read and write data in .CSV files. For example, we can save the first 20 days of data for S&P and Apple in a file using the command:
 
-```{r eval = TRUE, echo=TRUE, comment=NA, warning=FALSE, message=FALSE,results='asis'}
+
+```r
 write.csv(StockReturns[1:20,c("SPY","AAPL")], file = "twentydays.csv", row.names = TRUE, col.names = TRUE) 
 ```
 
 Do not get surpsised if you see the csv file in your directories suddenly! You can then read the data from the csv file using the read.csv command. For example, this will load the data from the csv file and save it in a new variable that now is called "myData": 
 
-```{r eval = TRUE, echo=TRUE, comment=NA, warning=FALSE, message=FALSE,results='asis'}
+
+```r
 myData <- read.csv(file = "twentydays.csv", header = TRUE, sep=";")
 ```
 
@@ -254,14 +288,20 @@ Try it!
 1. Once you write and read the data as described above, what happens when you run this command in the console of the RStudio: `sum(myData != StockReturns[1:20,])`
 2. *(Extra exercise)* What do you think will happen if you now run this command, and why:  
 
-```{r eval = FALSE, echo=TRUE}
+
+```r
 myData + StockReturns[1:40,]
 ```
 
 **Your Answers here:**  
 1.  
-```{r eval = TRUE, echo=TRUE}
+
+```r
 sum(myData != StockReturns[1:20,])
+```
+
+```
+## [1] 20
 ```
 
 N.B. col.names is ignored in the write.csv function.
@@ -284,7 +324,8 @@ Can you now load another dataset from some CSV file and report some basic statis
 
 Finally, just for fun, one can add some interactivity in the report using [Shiny](http://rmarkdown.rstudio.com/authoring_shiny.html).All one needs to do is set the eval flag of the code chunk below (see the .Rmd file) to "TRUE", add the line "runtime: shiny" at the very begining of the .Rmd file, make the markdown output to be "html_document", and then press "Run Document". 
 
-```{r, eval=FALSE, echo = TRUE}
+
+```r
 sliderInput("startdate", "Starting Date:", min = 1, max = length(portfolio), 
             value = 1)
 sliderInput("enddate", "End Date:", min = 1, max = length(portfolio), 
